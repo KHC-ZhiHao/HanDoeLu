@@ -1,0 +1,10 @@
+{
+	"name": "han-doe-lu",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "ISC",
+	"dependencies": {
+		"ip": "^1.1.5",
+		"socket.io": "^2.2.0"
+	}
+}
