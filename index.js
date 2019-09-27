@@ -5,7 +5,7 @@
 
 const fs = require('fs')
 const os = require('os')
-const ip = '10.99.1.120'
+const ip = '10.99.1.102'
 
 // ========================
 //
@@ -91,7 +91,7 @@ if (osType === 'Darwin') {
 }
 
 if (osType === 'Linux') {
-    controller.run('node ./controller/linux/Controller.js')
+    controller.run(`node ${__dirname}/controller/linux/index.js`, 'exec')
 }
 
 // ========================
