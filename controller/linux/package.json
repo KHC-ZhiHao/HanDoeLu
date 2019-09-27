@@ -1,0 +1,9 @@
+{
+	"name": "han-doe-lu-cotroller",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "ISC",
+	"dependencies": {
+		"socket.io-client": "^2.3.0"
+	}
+}

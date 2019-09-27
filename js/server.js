@@ -1,13 +1,12 @@
 const fs = require('fs')
-const ip = require('ip')
 const io = require('socket.io')
 const http = require('http')
 const querystring = require('querystring')
 
 module.exports = class {
 
-    constructor(customIp, port = 80) {
-        this.ip = customIp || ip.address()
+    constructor(ip, port = 80) {
+        this.ip = ip
         this.id = Date.now() + Math.floor(Math.random() * 10000000)
         this.port = port
         this.apis = {}

@@ -5,13 +5,13 @@
 
 const fs = require('fs')
 const os = require('os')
+const ip = '10.99.1.120'
 
 // ========================
 //
 // core
 //
 
-const Env = require('./env.js')
 const Action = require('./js/action')
 const Server = require('./js/server')
 const Controller = require('./js/controller')
@@ -21,7 +21,7 @@ const Controller = require('./js/controller')
 // server
 //
 
-let server = new Server(Env.ip)
+let server = new Server(ip)
     server.addStaticPage('/driver', './public/driver.html')
     server.addStaticPage('/dashboard', './public/dashboard.html')
 
@@ -82,7 +82,8 @@ let osType = os.type()
 let controller = new Controller(server)
     
 if (osType === 'Windows_NT') {
-    controller.run('./controller/windows/Controller.exe')
+    controller.run(`node ${__dirname}/controller/linux/index.js`, 'exec')
+    // controller.run('./controller/windows/Controller.exe')
 }
 
 if (osType === 'Darwin') {
@@ -90,7 +91,7 @@ if (osType === 'Darwin') {
 }
 
 if (osType === 'Linux') {
-    // do linux os
+    controller.run('node ./controller/linux/Controller.js')
 }
 
 // ========================

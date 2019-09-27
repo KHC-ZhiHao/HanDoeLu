@@ -3,22 +3,26 @@ const childProcess = require('child_process');
 module.exports = class {
 
     constructor(server) {
-        this.spawn = null
+        this.process = null
         this.server = server
         this.socketChannel = 'Controller'
         this.initSocket()
     }
 
-    run(url) {
-        this.spawn = childProcess.spawn(url, [`http://${this.server.ip}`])
+    run(url, mode = 'spawn') {
+        if (mode === 'spawn') {
+            this.process = childProcess.spawn(url, [`http://${this.server.ip}`])
+        } else {
+            this.process = childProcess.exec(url + ` http://${this.server.ip}`)
+        }
     }
 
     onInput(callback) {
-        this.spawn.stdip.on('data', callback)
+        this.process.stdip.on('data', callback)
     }
 
     onOutput(callback) {
-        this.spawn.stdout.on('data', callback)
+        this.process.stdout.on('data', callback)
     }
 
     initSocket() {
