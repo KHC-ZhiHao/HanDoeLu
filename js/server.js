@@ -5,7 +5,7 @@ const querystring = require('querystring')
 
 module.exports = class {
 
-    constructor(ip, port = 80) {
+    constructor(ip, port = 3000) {
         this.ip = ip
         this.id = Date.now() + Math.floor(Math.random() * 10000000)
         this.port = port
@@ -16,6 +16,10 @@ module.exports = class {
         this.initHttpServer()
         this.initWebSocketServer()
         console.log(`Server created.`)
+    }
+
+    get host() {
+        return this.ip + ':' + this.port
     }
 
     broadcast(channelName, data) {
@@ -47,7 +51,7 @@ module.exports = class {
                 api(request, response, query)
                 return null
             }
-            let publicUrl = this.public +url
+            let publicUrl = this.public + url
             if (publicUrl) {
                 this.getPublicFile(publicUrl)
                     .then(data => this.writeResponse(response, data))
@@ -91,12 +95,12 @@ module.exports = class {
     }
 
     addApi(url, callback) {
-        console.log(`Add API : http://${this.ip}/api${url}`)
+        console.log(`Add API : http://${this.host}/api${url}`)
         this.apis['/api' + url] = callback
     }
 
     addStaticPage(url, pageUrl) {
-        console.log(`Add Page : http://${this.ip}${url}`)
+        console.log(`Add Page : http://${this.host}${url}`)
         this.pages[url] = pageUrl
     }
 

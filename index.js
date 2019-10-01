@@ -5,7 +5,7 @@
 
 const fs = require('fs')
 const os = require('os')
-const ip = '10.99.1.102'
+const env = require('./env')
 
 // ========================
 //
@@ -21,7 +21,7 @@ const Controller = require('./js/controller')
 // server
 //
 
-let server = new Server(ip)
+let server = new Server(env.ip, env.port)
     server.addStaticPage('/driver', './public/driver.html')
     server.addStaticPage('/dashboard', './public/dashboard.html')
 
@@ -82,12 +82,11 @@ let osType = os.type()
 let controller = new Controller(server)
     
 if (osType === 'Windows_NT') {
-    controller.run(`node ${__dirname}/controller/linux/index.js`, 'exec')
-    // controller.run('./controller/windows/Controller.exe')
+    controller.run('./controller/windows/Controller.exe')
 }
 
 if (osType === 'Darwin') {
-    // do mac os
+    controller.run(`node ${__dirname}/controller/linux/index.js`, 'exec')
 }
 
 if (osType === 'Linux') {
@@ -101,7 +100,7 @@ if (osType === 'Linux') {
 
 const action = new Action(controller)
 
-action.setScreen(1920, 1080)
+action.setScreen(env.width, env.height)
 
 action.addButtonEvent('MouseReset', [
     function(value, action, controller) {

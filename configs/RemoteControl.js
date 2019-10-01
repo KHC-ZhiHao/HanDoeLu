@@ -21,9 +21,9 @@ module.exports = {
         0x000: {
             name: 'blue',
             code: 'Keyboard',
-            value: 33,
             style: 'background-color:cornflowerblue',
-            content: 'Q'
+            content: 'Q',
+            inputValue: 33
         },
         0x001: {
             name: 'red',

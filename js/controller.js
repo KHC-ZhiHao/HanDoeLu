@@ -10,7 +10,7 @@ module.exports = class {
     }
 
     run(process, params = []) {
-        this.process = childProcess.spawn(process, [...params, `http://${this.server.ip}`])
+        this.process = childProcess.spawn(process, [...params, `http://${this.server.host}`])
     }
 
     onInput(callback) {
