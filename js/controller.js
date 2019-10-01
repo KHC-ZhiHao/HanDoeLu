@@ -9,12 +9,8 @@ module.exports = class {
         this.initSocket()
     }
 
-    run(url, mode = 'spawn') {
-        if (mode === 'spawn') {
-            this.process = childProcess.spawn(url, [`http://${this.server.ip}`])
-        } else {
-            this.process = childProcess.exec(url + ` http://${this.server.ip}`)
-        }
+    run(process, params = []) {
+        this.process = childProcess.spawn(process, [...params, `http://${this.server.ip}`])
     }
 
     onInput(callback) {

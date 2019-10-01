@@ -91,7 +91,7 @@ if (osType === 'Darwin') {
 }
 
 if (osType === 'Linux') {
-    controller.run(`node ${__dirname}/controller/linux/index.js`, 'exec')
+    controller.run('node', [`${__dirname}/controller/linux/index.js`])
 }
 
 // ========================

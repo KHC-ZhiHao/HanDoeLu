@@ -1,17 +1,23 @@
 const io = require('socket.io-client')
 const ip = process.argv[2]
-const { execSync } = require('child_process')
+const { exec } = require('child_process')
 
 let socket = io(ip, { query: 'type=controller' })
 let working = false
+let queue = []
 
 function work(command) {
     if (working === true) {
-        return null
+	return null
     }
+    console.log('aaa')
     working = true
-    execSync(command)
-    working = false
+    exec(command, () => {
+    	console.log(command)
+	setTimeout(() => {
+	    working = false
+	}, 1000)
+    })
 }
 
 socket.on('GetMousePos', () => {
@@ -26,6 +32,3 @@ socket.on('Controller', (data) => {
     }
 })
 
-setInterval(() => {
-    console.log('ccc')
-}, 1000)
