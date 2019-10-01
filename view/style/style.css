@@ -10,7 +10,7 @@ body {
     padding: 0;
 }
 
-.fullscreen {
+#app {
     width: 100vw;
     height: 100vh;
 }
