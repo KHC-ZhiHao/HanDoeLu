@@ -16,11 +16,6 @@ export default function(components) {
                 path: '/driver',
                 name: 'driver',
                 component: components['app-driver']
-            },
-            {
-                path: '/setting',
-                name: 'setting',
-                component: components['app-setting']
             }
         ]
     })

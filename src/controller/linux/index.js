@@ -3,17 +3,7 @@ const ip = process.argv[2]
 const { exec } = require('child_process')
 
 let socket = io(ip, { query: 'type=controller' })
-let working = false
-
-function work(command) {
-    if (working === true) {
-        return null
-    }
-    working = true
-    exec(command, () => {
-        working = false
-    })
-}
+let moving = false
 
 socket.on('GetMousePos', () => {
     let pos = execSync(`xdotool getmouselocation`)
@@ -23,24 +13,30 @@ socket.on('GetMousePos', () => {
 
 socket.on('Controller', ({ type, value }) => {
     if (type == "KeyDown") {
-        work(`xdotool keydown ${value}`)
+        exec(`xdotool keydown ${value}`)
         return null
     }
     if (type == "KeyUp") {
-        work(`xdotool keyup ${value}`)
+        exec(`xdotool keyup ${value}`)
         return null
     }
     if (type === 'MouseMove') {
+        if (moving === true) {
+            return null
+        }
+        moving = true
         let prefix = value[0] < 0 ? '--' : ''
-        work(`xdotool mousemove_relative --sync ${prefix} ${value[0]} ${value[1]}`)
+        exec(`xdotool mousemove_relative --sync ${prefix} ${value[0]} ${value[1]}`, () => {
+            moving = false
+        })
         return null
     }
     if (type == "MouseTo") {
-        work(`xdotool mousemove --sync ${value[0]} ${value[1]}`)
+        exec(`xdotool mousemove --sync ${value[0]} ${value[1]}`)
         return null
     }
     if (type == "MouseEvent") {
-        work(`xdotool click ${value}`)
+        exec(`xdotool click ${value}`)
         return null
     }
 })

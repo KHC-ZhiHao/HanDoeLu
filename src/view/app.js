@@ -3,8 +3,7 @@ import loader from './lib/vue-http-loader/index.js'
 
 loader.addComponentFileFor('./components/', {
     'app-main': 'main.vue',
-    'app-driver': 'driver.vue',
-    'app-setting': 'setting.vue'
+    'app-driver': 'driver.vue'
 })
 
 loader.onload((components) => {

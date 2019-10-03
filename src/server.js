@@ -1,12 +1,13 @@
-const fs = require('fs')
 const io = require('socket.io')
 const http = require('http')
 const express = require('express')
 
 module.exports = class {
-    constructor(ip, port = 3000) {
+    constructor({ ip, port, width, height }) {
         this.ip = ip
-        this.port = port
+        this.port = port || 3000
+        this.width = width
+        this.height = height
         this.config = null
         this.initHttpServer()
         console.log(`Server created.`)
@@ -18,30 +19,32 @@ module.exports = class {
 
     initHttpServer() {
         this.app = express()
+        this.app.use(express.static(`${__dirname}/view`))
         this.server = http.createServer(this.app)
-        this.io = io(this.server)
-        this.app.use(express.static(`${__dirname}/page`))
-        this.app.get('/driver', function(req, res) {
-            res.sendFile(`${__dirname}/page/index.html`)
-        })
-        this.app.get('/setting', function(req, res) {
-            res.sendFile(`${__dirname}/page/index.html`)
-        })
-        this.app.listen(this.port, this.ip, () => {
+        this.socket = io(this.server)
+        this.server.listen(this.port, this.ip, () => {
             console.log(`http://${this.host}`)
         })
     }
 
-    setConfig(name) {
+    setStaticRouter(path) {
+        this.app.get(path, function(req, res) {
+            res.sendFile(`${__dirname}/view/index.html`)
+        })
+    }
+
+    setConfig(name, params) {
+        this.config = this.getConfig(name)
+        this.config.params = this.config.params || {}
+        Object.assign(this.config.params, params)
+    }
+
+    getConfig(name) {
         let path = `${__dirname}/configs/${name}.js`
         if (require.cache[path]) {
             delete require.cache[path]
         }
-        this.config = require(path)
-    }
-
-    getConfig() {
-        return this.config
+        return require(path)
     }
 
     setRouter(name, callback) {

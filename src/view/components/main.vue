@@ -7,7 +7,8 @@
             <select v-model="target">
                 <option v-for="config in configs" :key="config">{{ config }}</option>
             </select>
-            <button @click="setConfig()">Select</button>
+            <textarea v-if="detail" v-model="params"></textarea>
+            <button v-if="detail" @click="setConfig()">Select</button>
         </div>
     </div>
 </template>
@@ -25,6 +26,11 @@
         width: 100%;
         padding: 1em;
     }
+    #main textarea {
+        width: 100%;
+        height: 50vh;
+        resize: vertical;
+    }
 </style>
 
 <script>
@@ -32,7 +38,23 @@
         data() {
             return {
                 target: null,
-                configs: null
+                params: null,
+                configs: null,
+                detail: false
+            }
+        },
+        watch: {
+            target() {
+                let params = {
+                    name: this.target
+                }
+                this.detail = false
+                axios
+                    .get('./api/getConfigDetail', { params })
+                    .then(result => {
+                        this.detail = true
+                        this.params = JSON.stringify(result.data.params || {}, null, 4)
+                    })
             }
         },
         mounted() {
@@ -46,7 +68,8 @@
         methods: {
             setConfig() {
                 let params = {
-                    name: this.target
+                    name: this.target,
+                    params: this.params
                 }
                 axios
                     .get('./api/setConfig', { params })
