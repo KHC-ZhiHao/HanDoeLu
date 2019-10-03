@@ -7,8 +7,8 @@
             <div
                 class="button"
                 v-if="config.button[layout]"
-                @mousedown="down(layout)"
-                @mouseup="up(layout)"
+                @touchstart="down(layout)"
+                @touchend="up(layout)"
                 :style="`background-color:${config.button[layout].color || 'transparent'}`">
                 <span v-if="config.button[layout]">
                     {{ config.button[layout].text || '' }}
@@ -54,7 +54,7 @@
         background-color: transparent;
     }
 
-    #driver .unit:active {
+    #driver .unit .active {
         transform: scale(0.9);
     }
 
@@ -127,9 +127,11 @@
                 }
             },
             down(index) {
+                console.log('d')
                 this.socket.emit('driver-down', index)
             },
             up(index) {
+                console.log('u')
                 this.socket.emit('driver-up', index)
             },
             random() {

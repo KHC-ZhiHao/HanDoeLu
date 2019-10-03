@@ -4,6 +4,7 @@ const childProcess = require('child_process');
 module.exports = class {
     constructor(server) {
         this.server = server
+        this.osType = os.type()
         this.process = null
     }
 
@@ -24,14 +25,13 @@ module.exports = class {
     }
 
     start() {
-        let osType = os.type()
-        if (osType === 'Windows_NT') {
+        if (this.osType === 'Windows_NT') {
             this.process = childProcess.spawn(`${__dirname}/controller/windows/Controller.exe`, [this.host])
         }
-        if (osType === 'Darwin') {
+        if (this.osType === 'Darwin') {
             throw new Error('Not support macos.')
         }
-        if (osType === 'Linux') {
+        if (this.osType === 'Linux') {
             this.process = childProcess.spawn('node', [`${__dirname}/controller/linux/index.js`, this.host])
         }
     }
@@ -59,11 +59,85 @@ module.exports = class {
         this.emit('MouseTo', [Math.floor(x), Math.floor(y)])
     }
 
-    mouseEvent(value) {
+    mouseLeftDown() {
+        if (this.osType === 'Windows_NT') {
+            this.windowsMouseEvent(0x0002)
+        }
+        if (this.osType === 'Linux') {
+            this.emit('MouseDown', 1)
+        }
+    }
+
+    mouseLeftUp() {
+        if (this.osType === 'Windows_NT') {
+            this.windowsMouseEvent(0x0004)
+        }
+        if (this.osType === 'Linux') {
+            this.emit('MouseUp', 1)
+        }
+    }
+
+    mouseMiddleDown() {
+        if (this.osType === 'Windows_NT') {
+            this.windowsMouseEvent(0x0020)
+        }
+        if (this.osType === 'Linux') {
+            this.emit('MouseDown', 2)
+        }
+    }
+
+    mouseMiddleUp() {
+        if (this.osType === 'Windows_NT') {
+            this.windowsMouseEvent(0x0040)
+        }
+        if (this.osType === 'Linux') {
+            this.emit('MouseUp', 2)
+        }
+    }
+
+    mouseRightDown() {
+        if (this.osType === 'Windows_NT') {
+            this.windowsMouseEvent(0x0008)
+        }
+        if (this.osType === 'Linux') {
+            this.emit('MouseDown', 3)
+        }
+    }
+
+    mouseRightUp() {
+        if (this.osType === 'Windows_NT') {
+            this.windowsMouseEvent(0x0010)
+        }
+        if (this.osType === 'Linux') {
+            this.emit('MouseUp', 3)
+        }
+    }
+
+    // windows
+    
+    windowsMouseEvent(value) {
         this.emit('MouseEvent', Math.floor(value))
     }
 
-    mouseWheel(scroll) {
+    windowsMouseWheel(scroll) {
         this.emit('MouseWheel', Math.floor(scroll))
+    }
+
+    windowsDirectInput(value) {
+        this.emit('DirectInput', value)
+    }
+
+    // linux
+
+    linuxClick(value) {
+        this.emit('MouseClick', value)
+    }
+
+    linuxMouseUp(value) {
+        this.emit('MouseUp', value)
+    }
+
+    linuxMouseDown(value) {
+        this.emit('MouseDown', value)
     }
 }
