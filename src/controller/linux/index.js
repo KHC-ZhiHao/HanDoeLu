@@ -2,14 +2,8 @@ const io = require('socket.io-client')
 const ip = process.argv[2]
 const { exec } = require('child_process')
 
-let socket = io(ip, { query: 'type=controller' })
+let socket = io(ip)
 let moving = false
-
-socket.on('GetMousePos', () => {
-    let pos = execSync(`xdotool getmouselocation`)
-    console.log(pos)
-    socket.emit('MousePos', `[${5}, ${10}]`)
-})
 
 socket.on('Controller', ({ type, value }) => {
     if (type == "KeyDown") {
@@ -35,7 +29,15 @@ socket.on('Controller', ({ type, value }) => {
         exec(`xdotool mousemove --sync ${value[0]} ${value[1]}`)
         return null
     }
-    if (type == "MouseEvent") {
+    if (type == "MouseDown") {
+        exec(`xdotool mousedown ${value}`)
+        return null
+    }
+    if (type == "MouseUp") {
+        exec(`xdotool mouseup ${value}`)
+        return null
+    }
+    if (type == "MouseClick") {
         exec(`xdotool click ${value}`)
         return null
     }

@@ -1,7 +1,7 @@
 // https://www.itread01.com/content/1545905367.html 鍵盤對照表
 
 const os = require('os')
-const type = os.type()
+const isWindows = os.type() === 'Windows_NT'
 
 module.exports = {
     params: {
@@ -25,8 +25,20 @@ module.exports = {
         0x000: {
             text: 'm-left',
             color: 'cornflowerblue',
-            input: controller => controller.keyDown(48),
-            output: controller => controller.keyUp(48)
+            input: controller => {
+                if (isWindows) {
+                    controller.mouseEvent(0x0002)
+                } else {
+                    controller.mouseEvent(isWindows)
+                }
+            },
+            output: controller => controller.mouseEvent(isWindows ? 0x0004 : 0)
+        },
+        0x001: {
+            text: 'm-right',
+            color: 'cornflowerblue',
+            input: controller => controller.mouseEvent(isWindows ? 0 : 0),
+            output: controller => controller.mouseEvent(isWindows ? 0 : 0)
         },
         0x00F: {
             text: 'reset',
