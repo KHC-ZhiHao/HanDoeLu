@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"license": "ISC",
 	"scripts": {
-		"start": "node ."
+		"runLinux": "export DISPLAY=:0.0 && node ."
 	},
 	"dependencies": {
 		"express": "^4.17.1",

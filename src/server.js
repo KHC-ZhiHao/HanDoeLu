@@ -48,7 +48,6 @@ module.exports = class {
     }
 
     setRouter(name, callback) {
-        console.log(`API : http://${this.host}/api/${name}`)
         this.app.get(`/api/${name}`, callback)
     }
 }
