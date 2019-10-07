@@ -23,7 +23,7 @@ node index.js
 
 ### Windows
 
-windoes基於win32 api來模擬硬體操作，因為是使用C#呼叫，會執行一個exe檔，如果你不放心也可以在`code/C#`中自己編譯執行檔，並放置於`src/controller/windows`中。
+windows基於win32 api來模擬硬體操作，因為是使用C#呼叫，會執行一個exe檔，如果你不放心也可以在`code/C#`中自己編譯執行檔，並放置於`src/controller/windows`中。
 
 [windows 鍵盤對照表(十進位制值)](https://www.itread01.com/content/1545905367.html)
 
